@@ -1,0 +1,21 @@
+# Arquivos sensíveis
+.env
+
+# Binários pesados
+ffmpeg.exe
+
+# Pastas de cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Config do VSCode (caso use)
+.vscode/
+
+# Arquivos temporários
+*.log
+*.tmp
+
+# Ambiente virtual (caso esteja usando)
+venv/
+.env/
