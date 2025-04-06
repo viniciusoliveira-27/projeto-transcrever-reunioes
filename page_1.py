@@ -20,6 +20,17 @@ def salva_arquivo(caminho_arquivo, conteudo):
     with open(caminho_arquivo, 'w') as f:
         f.write(conteudo)
 
+def listar_reunioes():
+    lista_reunioes = PASTA_ARQUIVOS.glob('*')
+    lista_reunioes = list(lista_reunioes)
+    lista_reunioes.sort(reverse=True)
+    reunioes_dict = {}
+    for pasta_reuniao in lista_reunioes:
+        data_reuniao = pasta_reuniao.stem
+        ano, mes, dia, hora, min, seg = data_reuniao.split('-')
+        reunioes_dict[data_reuniao] = f'{ano}-{mes}-{dia} {hora}:{min}:{seg}'
+    return reunioes_dict
+
 # OPENAI UTILS =====================
 client = openai.OpenAI()
 
@@ -72,7 +83,7 @@ def tab_grava_reuniao():
     
     container = st.empty()
     container.markdown('**Comece a falar**')
-    pasta_reuniao = PASTA_ARQUIVOS / datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+    pasta_reuniao = PASTA_ARQUIVOS / datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
     pasta_reuniao.mkdir()
 
 
@@ -113,7 +124,8 @@ def tab_grava_reuniao():
 
 # TAB SELEÇÃO REUNIÃO =====================
 def tab_selecao_reuniao():
-    st.markdown('tab_selecao_reuniao')
+     reunioes_dict = listar_reunioes()
+     st.write(reunioes_dict)
 
 # MAIN =====================
 def main():
