@@ -55,19 +55,19 @@ def le_arquivo(caminho_arquivo):
 
 
 
-def listar_reunioes():
-    lista_reunioes = PASTA_ARQUIVOS.glob('*')
-    lista_reunioes = list(lista_reunioes)
-    lista_reunioes.sort(reverse=True)
-    reunioes_dict = {}
-    for pasta_reuniao in lista_reunioes:
+def listar_conversas():
+    lista_conversas = PASTA_ARQUIVOS.glob('*')
+    lista_conversas = list(lista_conversas)
+    lista_conversas.sort(reverse=True)
+    conversas_dict = {}
+    for pasta_reuniao in lista_conversas:
         data_reuniao = pasta_reuniao.stem
         ano, mes, dia, hora, min, seg = data_reuniao.split('-')
-        reunioes_dict[data_reuniao] = f'{ano}-{mes}-{dia} {hora}:{min}:{seg}'
+        conversas_dict[data_reuniao] = f'{ano}-{mes}-{dia} {hora}:{min}:{seg}'
         titulo = le_arquivo(pasta_reuniao / 'titulo.txt')
         if titulo != '':
-            reunioes_dict[data_reuniao] += f' - {titulo}'
-    return reunioes_dict
+            conversas_dict[data_reuniao] += f' - {titulo}'
+    return conversas_dict
 
 # OPENAI UTILS =====================
 client = openai.OpenAI()
@@ -106,7 +106,7 @@ def adiciona_chunck_audio(frames_de_audio, audio_chunck):
         audio_chunck += sound
     return audio_chunck
 
-def tab_grava_reuniao():
+def tab_grava_conversa():
     webrtx_ctx = webrtc_streamer(
         key='recebe_audio',
         mode=WebRtcMode.SENDONLY,
@@ -161,13 +161,13 @@ def tab_grava_reuniao():
 
 
 # TAB SELEÇÃO REUNIÃO =====================
-def tab_selecao_reuniao():
-     reunioes_dict = listar_reunioes()
-     if len(reunioes_dict) > 0:
+def tab_selecao_conversa():
+     conversas_dict = listar_conversas()
+     if len(conversas_dict) > 0:
         reunioao_selecionada = st.selectbox('Selecione uma reunião', 
-                                         list(reunioes_dict.values()))
+                                         list(conversas_dict.values()))
         st.divider()
-        reuniao_data = [k for k, v in reunioes_dict.items() if v == reunioao_selecionada][0]
+        reuniao_data = [k for k, v in conversas_dict.items() if v == reunioao_selecionada][0]
         pasta_reuniao = PASTA_ARQUIVOS / reuniao_data
         if not (pasta_reuniao / 'titulo.txt').exists():
             st.warning('Adicione um titulo para a reunião')
@@ -177,9 +177,6 @@ def tab_selecao_reuniao():
                 st.success('Título salvo com sucesso!')
                 st.rerun()
 
-            # st.button('Salvar',
-            #           on_click=salvar_titulo,
-            #           args=(pasta_reuniao, titulo_reuniao))
         else:
             titulo = le_arquivo(pasta_reuniao / 'titulo.txt')
             transcricao = le_arquivo(pasta_reuniao / 'transcricao.txt')
@@ -190,7 +187,7 @@ def tab_selecao_reuniao():
             
             st.markdown(f' ## {titulo}')            
             st.markdown(f' Transcrição: {transcricao}')
-            st.markdown(f' Resumo: {resumo}')
+            st.markdown(f' {resumo}')
 
 def salvar_titulo(pasta_reuniao, titulo):
     salva_arquivo(pasta_reuniao / 'titulo.txt' , titulo)
@@ -203,12 +200,12 @@ def gerar_resumo(pasta_reuniao):
     pass
 # MAIN =====================
 def main():
-    st.header('Bem-vindo ao ChatToNote 🎙️', divider=True)
-    tab_gravar, tab_selecao = st.tabs(['Gravar Reunião', 'Ver transcrições salvas'])
+    st.header('Bem-vindo ao Desenrola AI 🎙️', divider=True)
+    tab_gravar, tab_selecao = st.tabs(['Gravar Conversa', 'Ver transcrições salvas'])
     with tab_gravar:
-        tab_grava_reuniao()
+        tab_grava_conversa()
     with tab_selecao:
-        tab_selecao_reuniao()
+        tab_selecao_conversa()
 
 if __name__ == '__main__':
     main()
