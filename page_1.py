@@ -16,6 +16,10 @@ PASTA_ARQUIVOS.mkdir(exist_ok=True)
 
 _ = load_dotenv(find_dotenv())
 
+def salva_arquivo(caminho_arquivo, conteudo):
+    with open(caminho_arquivo, 'w') as f:
+        f.write(conteudo)
+
 # OPENAI UTILS =====================
 client = openai.OpenAI()
 
@@ -71,22 +75,35 @@ def tab_grava_reuniao():
     pasta_reuniao = PASTA_ARQUIVOS / datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
     pasta_reuniao.mkdir()
 
+
+    ultima_transcricao = time.time()
+    audio_completo = pydub.AudioSegment.empty()
     audio_chunck = pydub.AudioSegment.empty()
+    transcricao = ''
 
     # loop para ir pegando os frames de audio enquanto o start estiver dado
     while True:
         if webrtx_ctx.audio_receiver:
-            container.markdown('**Gravando...**')
+            # container.markdown('**Gravando...**')
             try:
                 frames_de_audio = webrtx_ctx.audio_receiver.get_frames(timeout=1)
             except queue.Empty:
                 time.sleep(0.1)
                 continue
+            audio_completo = adiciona_chunck_audio(frames_de_audio, audio_chunck)
             audio_chunck = adiciona_chunck_audio(frames_de_audio, audio_chunck)
             if len(audio_chunck) > 0:
-                audio_chunck.export(pasta_reuniao / 'audio_temp.mp3') 
+                audio_completo.export(pasta_reuniao / 'audio.mp3')   
+                agora = time.time()
+                if agora - ultima_transcricao > 5:
+                    ultima_transcricao = agora
+                    audio_chunck.export(pasta_reuniao / 'audio_temp.mp3')
+                    transcricao_chunck = transcreve_audio(pasta_reuniao / 'audio_temp.mp3')
+                    transcricao += transcricao_chunck
+                    salva_arquivo(pasta_reuniao / 'transcricao.txt', transcricao)
+                    container.markdown(transcricao)
 
-                
+                    audio_chunck = pydub.AudioSegment.empty()              
                 
         else:
             break
