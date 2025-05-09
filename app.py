@@ -200,7 +200,7 @@ def gerar_resumo(pasta_reuniao):
     pass
 # MAIN =====================
 def main():
-    st.header('Bem-vindo ao Desenrola AI 🎙️', divider=True)
+    st.header('Bem-vindo ao ResumAí 🎙️', divider=True)
     tab_gravar, tab_selecao = st.tabs(['Gravar Conversa', 'Ver transcrições salvas'])
     with tab_gravar:
         tab_grava_conversa()
