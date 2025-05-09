@@ -10,6 +10,8 @@ import pydub
 import openai
 from dotenv import load_dotenv, find_dotenv
 
+openai.api_key = st.secrets["OPENAI_API_KEY"]
+
 # forma de pegar o caminho completo do arquivo
 PASTA_ARQUIVOS = Path(__file__).parent / 'arquivos'
 PASTA_ARQUIVOS.mkdir(exist_ok=True)
