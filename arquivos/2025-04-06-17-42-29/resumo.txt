@@ -1,8 +1,0 @@
-Resumo conversa: Vinícius Ribeiro de Oliveira, um desenvolvedor Full Stack formado em Análise e Desenvolvimento de Sistemas, compartilhou sua transição da área de mecânica de usinagem para a tecnologia após concluir um Bootcamp de Desenvolvedor do Fuestech. Ele destacou sua experiência anterior como programador CMC, onde liderou uma equipe de operadores e gerenciou várias máquinas. Essa vivência foi fundamental para desenvolver habilidades em liderança, trabalho em equipe e raciocínio lógico, essenciais para sua nova carreira em tecnologia.
-
-principais pontos discutidos:
-  - Transição de carreira de usinagem para tecnologia
-  - Formação em Análise e Desenvolvimento de Sistemas
-  - Conclusão do Bootcamp de Desenvolvedor do Fuestech
-  - Experiência anterior como programador CMC
-  - Habilidades em liderança, trabalho em equipe e raciocínio lógico
