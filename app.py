@@ -50,7 +50,7 @@ def salva_arquivo(caminho_arquivo, conteudo):
 
 def le_arquivo(caminho_arquivo):
     if caminho_arquivo.exists():
-        with open(caminho_arquivo) as f:
+        with open(caminho_arquivo,  encoding='utf-8') as f:
             return f.read()
     else:
         return ''
