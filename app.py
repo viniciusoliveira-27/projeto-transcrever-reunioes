@@ -2,6 +2,8 @@ from pathlib import Path
 from datetime import datetime
 import time
 import queue
+import shutil
+from pathlib import Path
 
 from streamlit_webrtc import WebRtcMode, webrtc_streamer 
 import streamlit as st
@@ -191,8 +193,44 @@ def tab_selecao_conversa():
             st.markdown(f' Transcrição: {transcricao}')
             st.markdown(f' {resumo}')
 
+            # BOTÃO PARA EXCLUIR A REUNIÃO
+            if st.button('🗑️ Excluir esta reunião'):
+                try:
+                    shutil.rmtree(pasta_reuniao)
+                    st.success('Reunião excluída com sucesso.')
+                    st.rerun()
+                except Exception as e:
+                    st.error(f'Erro ao excluir a reunião: {e}')
+
+        
+
 def salvar_titulo(pasta_reuniao, titulo):
     salva_arquivo(pasta_reuniao / 'titulo.txt' , titulo)
+
+def deletar_transcricao():
+    st.header("🗑️ Excluir transcrição de reunião")
+    
+    if not PASTA_ARQUIVOS.exists():
+        st.info("Nenhuma transcrição encontrada.")
+        return
+
+    # Lista todas as subpastas com reuniões salvas
+    reunioes = [pasta for pasta in PASTA_ARQUIVOS.iterdir() if pasta.is_dir()]
+    
+    if not reunioes:
+        st.info("Nenhuma reunião encontrada.")
+        return
+
+    reuniao_selecionada = st.selectbox("Selecione a reunião que deseja excluir:", reunioes)
+
+    if st.button("Excluir reunião selecionada"):
+        try:
+            shutil.rmtree(reuniao_selecionada)
+            st.success(f"Reunião '{reuniao_selecionada.name}' excluída com sucesso.")
+        except Exception as e:
+            st.error(f"Erro ao excluir: {e}")
+
+
    
 def gerar_resumo(pasta_reuniao):
     transcricao = le_arquivo(pasta_reuniao / 'transcricao.txt')
