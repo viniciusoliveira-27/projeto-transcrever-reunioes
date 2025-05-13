@@ -145,10 +145,10 @@ def tab_grava_conversa():
                 continue
             audio_completo = adiciona_chunck_audio(frames_de_audio, audio_chunck)
             audio_chunck = adiciona_chunck_audio(frames_de_audio, audio_chunck)
-            if len(audio_chunck) > 0 and audio_chunck.dBFS > -30:
+            if len(audio_chunck) > 0 and audio_chunck.dBFS > -15:
                 audio_completo.export(pasta_reuniao / 'audio.mp3')   
                 agora = time.time()
-                if agora - ultima_transcricao > 30:
+                if agora - ultima_transcricao > 15:
                     ultima_transcricao = agora
                     audio_chunck.export(pasta_reuniao / 'audio_temp.mp3')
                     transcricao_chunck = transcreve_audio(pasta_reuniao / 'audio_temp.mp3')
